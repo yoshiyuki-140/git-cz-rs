@@ -2,7 +2,7 @@
 
 シンプルなcommitzen
 
-## install
+## Install
 
 - 前提
     - cargoをインストールして下さい
@@ -26,6 +26,11 @@ cd /tmp/git-cz-rs
 cargo install --path .
 ```
 
-## usage
+## Usage
 
 installが完了したら`git cz-rs`でコミット時にプログラムが走るはずです。
+
+## Option
+
+`cz.json`を各プロジェクトに配置すればコマンド実行時の最も近い親ディレクトリの`cz.json`を参照します.
+`cz.json`が空の場合は、ソースコードにハードコードされたデフォルトの設定が参照されます.
