@@ -33,12 +33,12 @@ pub fn load_config() -> Result<Option<CzConfig>> {
     let mut config_path = find_config_upwards(CONFIG_FILENAME);
 
     // 設定ファイルがない場合
-    if config_path.is_none() {
-        if let Some(mut home) = home_dir() {
-            home.push(CONFIG_FILENAME);
-            if home.is_file() {
-                config_path = Some(home);
-            }
+    if config_path.is_none()
+        && let Some(mut home) = home_dir()
+    {
+        home.push(CONFIG_FILENAME);
+        if home.is_file() {
+            config_path = Some(home);
         }
     }
     if let Some(path) = config_path {
