@@ -34,7 +34,10 @@ mod tests {
     fn test_resolve_options_uses_config_options() {
         let mut map = IndexMap::new();
         map.insert("custom".to_string(), "カスタム変更".to_string());
-        let config = Some(CzConfig { options: map, scopes: None });
+        let config = Some(CzConfig {
+            options: map,
+            scopes: None,
+        });
         let options = resolve_prompt_options(&config);
         assert_eq!(options, vec!["custom: カスタム変更"]);
     }

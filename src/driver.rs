@@ -32,8 +32,8 @@ pub fn load_config() -> Result<Option<CzConfig>> {
 
 /// 指定パスの JSON ファイルを読み込み CzConfig としてパースする
 fn parse_config(path: &PathBuf) -> Result<CzConfig> {
-    let json_str = fs::read_to_string(path)
-        .with_context(|| format!("{:?}の読み込みに失敗しました", path))?;
+    let json_str =
+        fs::read_to_string(path).with_context(|| format!("{:?}の読み込みに失敗しました", path))?;
     serde_json::from_str(&json_str).context("cz.jsonの形式が正しくありません")
 }
 

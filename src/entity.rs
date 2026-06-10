@@ -61,11 +61,7 @@ mod tests {
     /// スコープなしの場合、"type: subject" 形式でフォーマットされること
     #[test]
     fn test_format_without_scope() {
-        let msg = CommitMessage::new(
-            "fix".to_string(),
-            String::new(),
-            "バグ修正".to_string(),
-        );
+        let msg = CommitMessage::new("fix".to_string(), String::new(), "バグ修正".to_string());
         assert_eq!(msg.format(), "fix: バグ修正");
     }
 }
