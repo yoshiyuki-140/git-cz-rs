@@ -6,9 +6,11 @@ use std::env;
 use std::fs;
 use std::path::PathBuf;
 
+// NOTE: これもentityにおいてもいい
 // 探すファイル名
 const CONFIG_FILENAME: &str = "cz.json";
 
+// これもentityにおいてもいい
 // デフォルトのハードコード
 pub const DEFAULT_PROMPT_OPTIONS: [&str; 8] = [
     "feat:      新機能",
@@ -21,6 +23,7 @@ pub const DEFAULT_PROMPT_OPTIONS: [&str; 8] = [
     "chore:     ビルドプロセスやツールの変更",
 ];
 
+// NOTE: これはentityにおいてもいい気がする
 // 設定ファイルを紐づけるための型
 #[derive(Deserialize, Debug)]
 pub struct CzConfig {
@@ -28,6 +31,7 @@ pub struct CzConfig {
     pub scopes: Option<Vec<String>>,
 }
 
+// NOTE: これはdriversに配置してもいいか。
 // cz.jsonの設定を読み込む関数
 pub fn load_config() -> Result<Option<CzConfig>> {
     let mut config_path = find_config_upwards(CONFIG_FILENAME);
@@ -52,6 +56,7 @@ pub fn load_config() -> Result<Option<CzConfig>> {
     }
 }
 
+// NOTE: usecaseにおいてもいいか？
 // cz.jsonを親ディレクトリ方向に探索する関数
 // Option型はデータがNoneになる可能性がある場合に使うため、引数の型はOption型になっている
 fn find_config_upwards(filename: &str) -> Option<PathBuf> {

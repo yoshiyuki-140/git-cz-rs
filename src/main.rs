@@ -2,15 +2,35 @@ mod config;
 
 use anyhow::Result;
 use inquire::{Select, Text};
-use std::process::Command;
+use std::process::{Command, ExitStatus};
 
 // configモジュールの中から、公開されているものを使えるようにする
 use config::{DEFAULT_PROMPT_OPTIONS, load_config};
+
+use crate::config::CzConfig;
 
 fn main() -> Result<()> {
     // 設定を読み込む
     let config = load_config()?;
 
+    // コミットメッセージを作成
+    let commit_message = create_commit_message(config)?;
+
+    println!("\n実行するコマンド: git commit -m \"{commit_message}\"");
+
+    // gitコマンドの実行
+    let status = exec_git_command(&commit_message)?;
+
+    if status.success() {
+        println!("コミットが完了しました！");
+    } else {
+        eprintln!("コミットに失敗しました。");
+    }
+    Ok(())
+}
+
+/// コミットメッセージを作成する
+fn create_commit_message(config: Option<CzConfig>) -> anyhow::Result<String> {
     // 読み込んだ設定が空でない場合、それを読み込むが、空の場合はデフォルトのハードコードされた値を使用する
     let prompt_options = if let Some(ref c) = config {
         c.options
@@ -55,20 +75,13 @@ fn main() -> Result<()> {
 
     // メッセージの組み立て
     let commit_message = format!("{commit_type}{scope_str}: {subject}");
+    Ok(commit_message)
+}
 
-    println!("\n実行するコマンド: git commit -m \"{commit_message}\"");
-
-    // gitコマンドの実行
-    let status = Command::new("git")
+fn exec_git_command(commit_message: &String) -> anyhow::Result<ExitStatus> {
+    Ok(Command::new("git")
         .arg("commit")
         .arg("-m")
-        .arg(&commit_message)
-        .status()?;
-
-    if status.success() {
-        println!("コミットが完了しました！");
-    } else {
-        eprintln!("コミットに失敗しました。");
-    }
-    Ok(())
+        .arg(commit_message)
+        .status()?)
 }
