@@ -1,0 +1,2 @@
+cover:
+	cargo llvm-cov
