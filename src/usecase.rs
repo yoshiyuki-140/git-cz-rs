@@ -1,5 +1,6 @@
 use crate::entity::{CommitMessage, CzConfig, DEFAULT_PROMPT_OPTIONS};
 
+/// config の有無に応じてプロンプト用の選択肢一覧を返す
 pub fn resolve_prompt_options(config: &Option<CzConfig>) -> Vec<String> {
     match config {
         Some(c) => c.options.iter().map(|(k, v)| format!("{k}: {v}")).collect(),
@@ -10,6 +11,7 @@ pub fn resolve_prompt_options(config: &Option<CzConfig>) -> Vec<String> {
     }
 }
 
+/// type・scope・subject から CommitMessage を組み立てる
 pub fn build_commit_message(commit_type: String, scope: String, subject: String) -> CommitMessage {
     CommitMessage::new(commit_type, scope, subject)
 }

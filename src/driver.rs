@@ -7,6 +7,7 @@ use std::process::Command;
 
 use crate::entity::CzConfig;
 
+/// 探索する設定ファイル名
 const CONFIG_FILENAME: &str = "cz.json";
 
 /// cz.jsonを読み込む関数
@@ -29,6 +30,7 @@ pub fn load_config() -> Result<Option<CzConfig>> {
     }
 }
 
+/// 指定パスの JSON ファイルを読み込み CzConfig としてパースする
 fn parse_config(path: &PathBuf) -> Result<CzConfig> {
     let json_str = fs::read_to_string(path)
         .with_context(|| format!("{:?}の読み込みに失敗しました", path))?;
@@ -40,6 +42,7 @@ fn find_config_upwards(filename: &str) -> Option<PathBuf> {
     find_config_from(filename, env::current_dir().ok()?)
 }
 
+/// start を起点として親ディレクトリ方向に filename を探索する
 fn find_config_from(filename: &str, start: PathBuf) -> Option<PathBuf> {
     let mut current_dir = start;
     loop {

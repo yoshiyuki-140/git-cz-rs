@@ -1,7 +1,7 @@
-/// これらは変更があまりされないだろうからentityに含めました
 use indexmap::IndexMap;
 use serde::Deserialize;
 
+/// cz.json が存在しない場合に使用するデフォルトのコミットタイプ一覧
 pub const DEFAULT_PROMPT_OPTIONS: [&str; 8] = [
     "feat:      新機能",
     "fix:       バグ修正",

@@ -5,6 +5,7 @@ mod usecase;
 
 use anyhow::Result;
 
+/// 設定を読み込み、対話形式でコミットメッセージを作成して git commit を実行する
 fn main() -> Result<()> {
     let config = driver::load_config()?;
     let options = usecase::resolve_prompt_options(&config);
