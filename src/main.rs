@@ -1,87 +1,26 @@
-mod config;
+mod adapter;
+mod driver;
+mod entity;
+mod usecase;
 
 use anyhow::Result;
-use inquire::{Select, Text};
-use std::process::{Command, ExitStatus};
-
-// configモジュールの中から、公開されているものを使えるようにする
-use config::{DEFAULT_PROMPT_OPTIONS, load_config};
-
-use crate::config::CzConfig;
 
 fn main() -> Result<()> {
-    // 設定を読み込む
-    let config = load_config()?;
+    let config = driver::load_config()?;
+    let options = usecase::resolve_prompt_options(&config);
+    let commit_type = adapter::select_commit_type(options)?;
+    let scope = adapter::select_or_input_scope(&config)?;
+    let subject = adapter::input_subject()?;
+    let commit_message = usecase::build_commit_message(commit_type, scope, subject);
+    let formatted = commit_message.format();
 
-    // コミットメッセージを作成
-    let commit_message = create_commit_message(config)?;
+    println!("\n実行するコマンド: git commit -m \"{formatted}\"");
 
-    println!("\n実行するコマンド: git commit -m \"{commit_message}\"");
-
-    // gitコマンドの実行
-    let status = exec_git_command(&commit_message)?;
-
-    if status.success() {
+    if driver::execute_git_commit(&formatted)? {
         println!("コミットが完了しました！");
     } else {
         eprintln!("コミットに失敗しました。");
     }
+
     Ok(())
-}
-
-/// コミットメッセージを作成する
-fn create_commit_message(config: Option<CzConfig>) -> anyhow::Result<String> {
-    // 読み込んだ設定が空でない場合、それを読み込むが、空の場合はデフォルトのハードコードされた値を使用する
-    let prompt_options = if let Some(ref c) = config {
-        c.options
-            .iter()
-            .map(|(key, desc)| format!("{key}: {desc}"))
-            .collect::<Vec<String>>()
-    } else {
-        // cz.jsonが存在しない場合はデフォルトのハードコード設定を使う
-        // ハードコードされた定数はVec<&str>型なのでto_stringを用いてString型に変換する
-        DEFAULT_PROMPT_OPTIONS
-            .iter()
-            .map(|s| s.to_string())
-            .collect()
-    };
-
-    let type_selection: String =
-        Select::new("コミットタイプを選択してください", prompt_options).prompt()?;
-    let commit_type = type_selection.split(':').next().unwrap();
-
-    let scope_str = if let Some(Some(scopes)) = config.as_ref().map(|c| c.scopes.as_ref()) {
-        let mut scope_options = vec!["(スキップ)".to_string()];
-        scope_options.extend(scopes.clone());
-
-        let selected_scope = Select::new("スコープを選択してください", scope_options).prompt()?;
-        if selected_scope == "(スキップ)" {
-            "".to_string()
-        } else {
-            format!("({selected_scope})")
-        }
-    } else {
-        let scope =
-            Text::new("スコープを入力してください(例: ui, parser) [Enterでスキップ]:").prompt()?;
-        if scope.is_empty() {
-            "".to_string()
-        } else {
-            format!("({scope})")
-        }
-    };
-
-    // サマリーの入力
-    let subject = Text::new("変更内容の要約を入力してください:").prompt()?;
-
-    // メッセージの組み立て
-    let commit_message = format!("{commit_type}{scope_str}: {subject}");
-    Ok(commit_message)
-}
-
-fn exec_git_command(commit_message: &String) -> anyhow::Result<ExitStatus> {
-    Ok(Command::new("git")
-        .arg("commit")
-        .arg("-m")
-        .arg(commit_message)
-        .status()?)
 }
