@@ -23,7 +23,7 @@ cd /tmp/git-cz-rs
 インストール
 
 ```bash
-cargo install --path .
+cargo install --git https://github.com/yoshiyuki-140/git-cz-rs.git
 ```
 
 ## Usage
