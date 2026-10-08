@@ -59,12 +59,21 @@ fn find_config_from(filename: &str, start: PathBuf) -> Option<PathBuf> {
 
 /// gitコマンドを実行する関数
 pub fn execute_git_commit(message: &str) -> Result<bool> {
+    println!("\n実行するコマンド: git commit -m \"{message}\"");
+
     let status = Command::new("git")
         .arg("commit")
         .arg("-m")
         .arg(message)
         .status()?;
-    Ok(status.success())
+
+    let succeeded = status.success();
+    if succeeded {
+        println!("コミットが完了しました！");
+    } else {
+        eprintln!("コミットに失敗しました。");
+    }
+    Ok(succeeded)
 }
 
 #[cfg(test)]
