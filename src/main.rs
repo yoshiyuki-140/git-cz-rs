@@ -5,7 +5,7 @@ mod usecase;
 
 use anyhow::Result;
 
-/// 設定を読み込み、対話形式でコミットメッセージを作成して git commit を実行する
+/// 各プログラムのオーケストレーションを行う
 fn main() -> Result<()> {
     // `cz.json`の読み込み
     let config = driver::load_config()?;
