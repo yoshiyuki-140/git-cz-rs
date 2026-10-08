@@ -17,6 +17,8 @@ cargo install --git https://github.com/yoshiyuki-140/git-cz-rs.git
 
 installが完了したら`git cz-rs`でコミット時にプログラムが走るはずです。
 
+<img width="2500" height="1000" alt="feature-3" src="https://github.com/user-attachments/assets/598767a1-f79c-44f9-bbe4-ecaada8b9496" />
+
 ## Option
 
 `cz.json`を各プロジェクトに配置すればコマンド実行時の最も近い親ディレクトリの`cz.json`を参照します.
