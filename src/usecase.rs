@@ -41,6 +41,7 @@ mod tests {
         let config = Some(CzConfig {
             options: map,
             scopes: None,
+            subject: None,
         });
         let options = resolve_prompt_options(&config);
         assert_eq!(options, vec!["custom: カスタム変更"]);

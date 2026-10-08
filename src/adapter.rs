@@ -36,6 +36,22 @@ pub fn select_or_input_scope(config: &Option<CzConfig>) -> Result<String> {
 }
 
 /// 変更内容の要約を取得する関数
-pub fn input_subject() -> Result<String> {
-    Ok(Text::new("変更内容の要約を入力してください:").prompt()?)
+pub fn input_subject(config: &Option<CzConfig>) -> Result<String> {
+    loop {
+        let subject = Text::new("変更内容の要約を入力してください:").prompt()?;
+        if let Some(max_commit_message_size) = config
+            .as_ref()
+            .and_then(|c| c.subject.as_ref())
+            .and_then(|s| s.max_commit_message_size)
+            && subject.chars().count() > max_commit_message_size
+        {
+            eprintln!(
+                "変更内容の要約は {} 文字以内にしてください",
+                max_commit_message_size
+            );
+            continue;
+        }
+        print!("{}文字", subject.chars().count()); // 制限文字数以下の場合に文字数を出力する
+        return Ok(subject);
+    }
 }

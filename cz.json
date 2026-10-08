@@ -12,5 +12,8 @@
     "scopes": [
         "ui",
         "parser"
-    ]
+    ],
+    "subject": {
+        "max_commit_message_size": 50
+    }
 }
