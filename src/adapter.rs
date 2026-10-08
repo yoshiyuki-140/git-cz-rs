@@ -41,7 +41,8 @@ pub fn input_subject(config: &Option<CzConfig>) -> Result<String> {
         let subject = Text::new("変更内容の要約を入力してください:").prompt()?;
         if let Some(max_commit_message_size) = config
             .as_ref()
-            .and_then(|c| c.subject.max_commit_message_size)
+            .and_then(|c| c.subject.as_ref())
+            .and_then(|s| s.max_commit_message_size)
             && subject.chars().count() > max_commit_message_size
         {
             eprintln!(

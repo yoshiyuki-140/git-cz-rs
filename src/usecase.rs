@@ -22,8 +22,6 @@ pub fn build_commit_message(commit_type: String, scope: String, subject: String)
 
 #[cfg(test)]
 mod tests {
-    use crate::entity::SubjectConfig;
-
     use super::*;
     use indexmap::IndexMap;
 
@@ -43,9 +41,7 @@ mod tests {
         let config = Some(CzConfig {
             options: map,
             scopes: None,
-            subject: SubjectConfig {
-                max_commit_message_size: Some(50),
-            },
+            subject: None,
         });
         let options = resolve_prompt_options(&config);
         assert_eq!(options, vec!["custom: カスタム変更"]);
