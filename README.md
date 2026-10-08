@@ -7,7 +7,7 @@
 - 前提
     - cargoをインストールして下さい
 
-インストール
+以下のコマンドを実行してください。
 
 ```bash
 cargo install --git https://github.com/yoshiyuki-140/git-cz-rs.git
