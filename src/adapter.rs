@@ -1,5 +1,5 @@
 // ユーザとのやり取りをする関数をまとている
-use anyhow::{Result, bail};
+use anyhow::Result;
 use inquire::{Select, Text};
 
 use crate::entity::CzConfig;
@@ -37,16 +37,19 @@ pub fn select_or_input_scope(config: &Option<CzConfig>) -> Result<String> {
 
 /// 変更内容の要約を取得する関数
 pub fn input_subject(config: &Option<CzConfig>) -> Result<String> {
-    let subject = Text::new("変更内容の要約を入力してください:").prompt()?;
-    if let Some(max_commit_message_size) = config
-        .as_ref()
-        .and_then(|c| c.subject.max_commit_message_size)
-        && subject.chars().count() > max_commit_message_size
-    {
-        bail!(
-            "変更内容の要約は {} 文字以内にしてください",
-            max_commit_message_size
-        );
+    loop {
+        let subject = Text::new("変更内容の要約を入力してください:").prompt()?;
+        if let Some(max_commit_message_size) = config
+            .as_ref()
+            .and_then(|c| c.subject.max_commit_message_size)
+            && subject.chars().count() > max_commit_message_size
+        {
+            eprintln!(
+                "変更内容の要約は {} 文字以内にしてください",
+                max_commit_message_size
+            );
+            continue;
+        }
+        return Ok(subject);
     }
-    Ok(subject)
 }
