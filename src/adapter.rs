@@ -50,6 +50,7 @@ pub fn input_subject(config: &Option<CzConfig>) -> Result<String> {
             );
             continue;
         }
+        println!("{}文字", subject.chars().count()); // 制限文字数以下の場合に文字数を出力する
         return Ok(subject);
     }
 }
