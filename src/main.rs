@@ -13,7 +13,7 @@ fn main() -> Result<()> {
     let scope = adapter::select_or_input_scope(&config)?;
     let subject = adapter::input_subject()?;
     let commit_message = usecase::build_commit_message(commit_type, scope, subject);
-    let formatted = commit_message.format();
+    let formatted = commit_message;
 
     println!("\n実行するコマンド: git commit -m \"{formatted}\"");
 
