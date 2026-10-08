@@ -12,8 +12,12 @@ pub fn resolve_prompt_options(config: &Option<CzConfig>) -> Vec<String> {
 }
 
 /// type・scope・subject から CommitMessage を組み立てる
-pub fn build_commit_message(commit_type: String, scope: String, subject: String) -> CommitMessage {
-    CommitMessage::new(commit_type, scope, subject)
+pub fn build_commit_message(commit_type: String, scope: String, subject: String) -> String {
+    let commit_message = CommitMessage::new(commit_type, scope, subject);
+    format!(
+        "{}{}: {}",
+        commit_message.commit_type, commit_message.scope, commit_message.subject
+    )
 }
 
 #[cfg(test)]
@@ -50,6 +54,23 @@ mod tests {
             "(api)".to_string(),
             "エンドポイントを追加".to_string(),
         );
-        assert_eq!(msg.format(), "feat(api): エンドポイントを追加");
+        assert_eq!(msg, "feat(api): エンドポイントを追加");
+    }
+    /// スコープありの場合、"type(scope): subject" 形式でフォーマットされること
+    #[test]
+    fn test_format_with_scope() {
+        let msg = build_commit_message(
+            "feat".to_string(),
+            "(ui)".to_string(),
+            "ボタンを追加".to_string(),
+        );
+        assert_eq!(msg, "feat(ui): ボタンを追加");
+    }
+
+    /// スコープなしの場合、"type: subject" 形式でフォーマットされること
+    #[test]
+    fn test_format_without_scope() {
+        let msg = build_commit_message("fix".to_string(), String::new(), "バグ修正".to_string());
+        assert_eq!(msg, "fix: バグ修正");
     }
 }

@@ -1,10 +1,13 @@
+// ユーザとのやり取りをする関数をまとている
 use anyhow::Result;
 use inquire::{Select, Text};
 
 use crate::entity::CzConfig;
+use crate::usecase::resolve_prompt_options;
 
 /// コミット種別を選択する関数
-pub fn select_commit_type(options: Vec<String>) -> Result<String> {
+pub fn select_commit_type(config: &Option<CzConfig>) -> Result<String> {
+    let options = resolve_prompt_options(config);
     let selection = Select::new("コミットタイプを選択してください", options).prompt()?;
     let commit_type = selection.split(':').next().unwrap().trim().to_string();
     Ok(commit_type)

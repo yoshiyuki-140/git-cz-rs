@@ -36,32 +36,22 @@ impl CommitMessage {
             subject,
         }
     }
-
-    /// コミットメッセージを成形
-    pub fn format(&self) -> String {
-        format!("{}{}: {}", self.commit_type, self.scope, self.subject)
-    }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
-    /// スコープありの場合、"type(scope): subject" 形式でフォーマットされること
+    // データ構造が作成できること
     #[test]
-    fn test_format_with_scope() {
+    fn test_create_commit_message_data() {
         let msg = CommitMessage::new(
             "feat".to_string(),
             "(ui)".to_string(),
             "ボタンを追加".to_string(),
         );
-        assert_eq!(msg.format(), "feat(ui): ボタンを追加");
-    }
-
-    /// スコープなしの場合、"type: subject" 形式でフォーマットされること
-    #[test]
-    fn test_format_without_scope() {
-        let msg = CommitMessage::new("fix".to_string(), String::new(), "バグ修正".to_string());
-        assert_eq!(msg.format(), "fix: バグ修正");
+        assert_eq!(msg.commit_type, "feat");
+        assert_eq!(msg.scope, "(ui)");
+        assert_eq!(msg.subject, "ボタンを追加");
     }
 }
