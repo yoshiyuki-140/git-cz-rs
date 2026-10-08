@@ -18,6 +18,12 @@ pub const DEFAULT_PROMPT_OPTIONS: [&str; 8] = [
 pub struct CzConfig {
     pub options: IndexMap<String, String>,
     pub scopes: Option<Vec<String>>,
+    pub subject: SubjectConfig,
+}
+// コミットメッセージの主題テキストデータに課すデータ構造
+#[derive(Deserialize, Debug)]
+pub struct SubjectConfig {
+    pub max_commit_message_size: Option<usize>,
 }
 
 /// コミットメッセージの型を指定している
