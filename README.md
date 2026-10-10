@@ -5,7 +5,7 @@
 ## Install
 
 - 前提
-    - cargoをインストールして下さい
+    - [cargo](https://doc.rust-lang.org/cargo/getting-started/installation.html)をインストールして下さい
 
 以下のコマンドを実行してください。
 
