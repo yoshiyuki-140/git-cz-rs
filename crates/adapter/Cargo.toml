@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-anyhow = "1.0.104"
-inquire = "0.9.4"
+anyhow = { workspace = true }
+inquire = { workspace = true }
 entity = { path = "../entity" }
 usecase = { path = "../usecase" }
