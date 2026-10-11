@@ -34,6 +34,7 @@ pub struct CommitMessage {
     pub description: String,
     pub body: String,
     pub footer: String,
+    pub breaking_change_message: String, // ここが""(空文字)の時は、ブレイキングチェンジとしない
 }
 
 impl CommitMessage {
@@ -44,6 +45,7 @@ impl CommitMessage {
         description: String,
         body: String,
         footer: String,
+        breaking_change_message: String,
     ) -> Self {
         Self {
             commit_type,
@@ -51,6 +53,7 @@ impl CommitMessage {
             description,
             body,
             footer,
+            breaking_change_message,
         }
     }
 }
@@ -68,11 +71,13 @@ mod tests {
             "ボタンを追加".to_string(),
             "sample body".to_string(),
             "sample footer".to_string(),
+            "".to_string(),
         );
         assert_eq!(msg.commit_type, "feat");
         assert_eq!(msg.scope, "(ui)");
         assert_eq!(msg.description, "ボタンを追加");
         assert_eq!(msg.body, "sample body");
         assert_eq!(msg.footer, "sample footer");
+        assert_eq!(msg.breaking_change_message, "");
     }
 }

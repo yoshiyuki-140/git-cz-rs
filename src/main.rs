@@ -9,8 +9,14 @@ fn main() -> Result<()> {
     let scope = adapter::select_or_input_scope(&config)?;
     let subject = adapter::input_subject(&config)?;
     // ユーザの出力を使って文字列に成形
-    let commit_message =
-        usecase::build_commit_message(commit_type, scope, subject, "".to_string(), "".to_string());
+    let commit_message = usecase::build_commit_message(
+        commit_type,
+        scope,
+        subject,
+        "".to_string(),
+        "".to_string(),
+        "".to_string(),
+    );
     // gitコマンドの実行
     driver::execute_git_commit(&commit_message)?;
     Ok(())

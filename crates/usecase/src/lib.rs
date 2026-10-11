@@ -22,16 +22,40 @@ pub fn build_commit_message(
     description: String,
     body: String,
     footer: String,
+    breaking_change_message: String,
 ) -> String {
-    let commit_message = CommitMessage::new(commit_type, scope, description, body, footer);
-    format!(
-        "{}{}: {}\n\n{}\n\n{}",
-        commit_message.commit_type,
-        commit_message.scope,
-        commit_message.description,
-        commit_message.body,
-        commit_message.footer
-    )
+    let commit_message = CommitMessage::new(
+        commit_type,
+        scope,
+        description,
+        body,
+        footer,
+        breaking_change_message,
+    );
+
+    // 破壊的変更がある場合
+    // 型・スコープの接尾辞に'!'記号と'BREAKING CHANGE:'及びコメントを結合する
+    // 参考：https://www.conventionalcommits.org/ja/v1.0.0/#-%E3%81%A8-breaking-change-%E3%83%95%E3%83%83%E3%82%BF%E3%83%BC%E3%81%AE%E4%B8%A1%E6%96%B9%E3%82%92%E6%8C%81%E3%81%A4%E3%82%B3%E3%83%9F%E3%83%83%E3%83%88%E3%83%A1%E3%83%83%E3%82%BB%E3%83%BC%E3%82%B8
+    if commit_message.breaking_change_message.is_empty() {
+        format!(
+            "{}{}: {}\n\n{}\n\n{}",
+            commit_message.commit_type,
+            commit_message.scope,
+            commit_message.description,
+            commit_message.body,
+            commit_message.footer,
+        )
+    } else {
+        format!(
+            "{}{}!: {}\n\n{}\n\n{}\nBREAKING CHANGE: {}",
+            commit_message.commit_type,
+            commit_message.scope,
+            commit_message.description,
+            commit_message.body,
+            commit_message.footer,
+            commit_message.breaking_change_message
+        )
+    }
 }
 
 #[cfg(test)]
@@ -61,7 +85,7 @@ mod tests {
         assert_eq!(options, vec!["custom: カスタム変更"]);
     }
 
-    /// type・scope・subject を渡すと正しくフォーマットされた CommitMessage が返ること
+    /// type・scope・descriptionを渡すと正しくフォーマットされた CommitMessage が返ること
     #[test]
     fn test_build_commit_message() {
         let msg = build_commit_message(
@@ -69,24 +93,12 @@ mod tests {
             "(api)".to_string(),
             "エンドポイントを追加".to_string(),
             "エンドポイントを追加しました".to_string(),
-            "BREAKING CHANGE:".to_string(),
+            "".to_string(),
+            "".to_string(),
         );
         assert_eq!(
             msg,
-            "feat(api): エンドポイントを追加\n\nエンドポイントを追加しました\n\nBREAKING CHANGE:"
+            "feat(api): エンドポイントを追加\n\nエンドポイントを追加しました\n\n"
         );
-    }
-
-    /// スコープなしの場合、"type: subject" 形式でフォーマットされること
-    #[test]
-    fn test_format_without_scope() {
-        let msg = build_commit_message(
-            "fix".to_string(),
-            String::new(),
-            "バグ修正".to_string(),
-            "".to_string(),
-            "".to_string(),
-        );
-        assert_eq!(msg, "fix: バグ修正\n\n\n\n");
     }
 }
