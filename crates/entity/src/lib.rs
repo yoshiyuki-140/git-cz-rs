@@ -31,16 +31,26 @@ pub struct SubjectConfig {
 pub struct CommitMessage {
     pub commit_type: String,
     pub scope: String,
-    pub subject: String,
+    pub description: String,
+    pub body: String,
+    pub footer: String,
 }
 
 impl CommitMessage {
     /// CommitMessageのコンストラクタ
-    pub fn new(commit_type: String, scope: String, subject: String) -> Self {
+    pub fn new(
+        commit_type: String,
+        scope: String,
+        description: String,
+        body: String,
+        footer: String,
+    ) -> Self {
         Self {
             commit_type,
             scope,
-            subject,
+            description,
+            body,
+            footer,
         }
     }
 }
@@ -56,9 +66,13 @@ mod tests {
             "feat".to_string(),
             "(ui)".to_string(),
             "ボタンを追加".to_string(),
+            "sample body".to_string(),
+            "sample footer".to_string(),
         );
         assert_eq!(msg.commit_type, "feat");
         assert_eq!(msg.scope, "(ui)");
-        assert_eq!(msg.subject, "ボタンを追加");
+        assert_eq!(msg.description, "ボタンを追加");
+        assert_eq!(msg.body, "sample body");
+        assert_eq!(msg.footer, "sample footer");
     }
 }

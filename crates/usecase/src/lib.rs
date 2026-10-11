@@ -16,11 +16,21 @@ pub fn resolve_prompt_options(config: &Option<CzConfig>) -> Vec<String> {
 }
 
 /// type・scope・subject から CommitMessage を組み立てる
-pub fn build_commit_message(commit_type: String, scope: String, subject: String) -> String {
-    let commit_message = CommitMessage::new(commit_type, scope, subject);
+pub fn build_commit_message(
+    commit_type: String,
+    scope: String,
+    description: String,
+    body: String,
+    footer: String,
+) -> String {
+    let commit_message = CommitMessage::new(commit_type, scope, description, body, footer);
     format!(
-        "{}{}: {}",
-        commit_message.commit_type, commit_message.scope, commit_message.subject
+        "{}{}: {}\n\n{}\n\n{}",
+        commit_message.commit_type,
+        commit_message.scope,
+        commit_message.description,
+        commit_message.body,
+        commit_message.footer
     )
 }
 
@@ -58,24 +68,25 @@ mod tests {
             "feat".to_string(),
             "(api)".to_string(),
             "エンドポイントを追加".to_string(),
+            "エンドポイントを追加しました".to_string(),
+            "BREAKING CHANGE:".to_string(),
         );
-        assert_eq!(msg, "feat(api): エンドポイントを追加");
-    }
-    /// スコープありの場合、"type(scope): subject" 形式でフォーマットされること
-    #[test]
-    fn test_format_with_scope() {
-        let msg = build_commit_message(
-            "feat".to_string(),
-            "(ui)".to_string(),
-            "ボタンを追加".to_string(),
+        assert_eq!(
+            msg,
+            "feat(api): エンドポイントを追加\n\nエンドポイントを追加しました\n\nBREAKING CHANGE:"
         );
-        assert_eq!(msg, "feat(ui): ボタンを追加");
     }
 
     /// スコープなしの場合、"type: subject" 形式でフォーマットされること
     #[test]
     fn test_format_without_scope() {
-        let msg = build_commit_message("fix".to_string(), String::new(), "バグ修正".to_string());
-        assert_eq!(msg, "fix: バグ修正");
+        let msg = build_commit_message(
+            "fix".to_string(),
+            String::new(),
+            "バグ修正".to_string(),
+            "".to_string(),
+            "".to_string(),
+        );
+        assert_eq!(msg, "fix: バグ修正\n\n\n\n");
     }
 }
