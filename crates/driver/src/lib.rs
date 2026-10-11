@@ -105,8 +105,8 @@ mod tests {
     fn test_parse_config_valid_json() {
         let dir = tempdir().unwrap();
         let config_path = dir.path().join("cz.json");
-        fs::write(&config_path, r#"{"options": {"feat": "新機能"}}"#).unwrap();
+        fs::write(&config_path, r#"{"commit_types": {"feat": "新機能"}}"#).unwrap();
         let result = parse_config(&config_path).unwrap();
-        assert_eq!(result.options["feat"], "新機能");
+        assert_eq!(result.commit_types["feat"], "新機能");
     }
 }

@@ -3,7 +3,11 @@ use entity::{CommitMessage, CzConfig, DEFAULT_PROMPT_OPTIONS};
 /// config の有無に応じてプロンプト用の選択肢一覧を返す
 pub fn resolve_prompt_options(config: &Option<CzConfig>) -> Vec<String> {
     match config {
-        Some(c) => c.options.iter().map(|(k, v)| format!("{k}: {v}")).collect(),
+        Some(c) => c
+            .commit_types
+            .iter()
+            .map(|(k, v)| format!("{k}: {v}"))
+            .collect(),
         None => DEFAULT_PROMPT_OPTIONS
             .iter()
             .map(|s| s.to_string())
@@ -39,9 +43,9 @@ mod tests {
         let mut map = IndexMap::new();
         map.insert("custom".to_string(), "カスタム変更".to_string());
         let config = Some(CzConfig {
-            options: map,
+            commit_types: map,
             scopes: None,
-            subject: None,
+            description: None,
         });
         let options = resolve_prompt_options(&config);
         assert_eq!(options, vec!["custom: カスタム変更"]);

@@ -16,10 +16,10 @@ pub const DEFAULT_PROMPT_OPTIONS: [&str; 8] = [
 /// cz.jsonの形式を指定してる
 #[derive(Deserialize, Debug)]
 pub struct CzConfig {
-    pub options: IndexMap<String, String>,
+    pub commit_types: IndexMap<String, String>,
     // Optionを付けるのはcz.jsonに存在無くてもエラーを回避するため
     pub scopes: Option<Vec<String>>,
-    pub subject: Option<SubjectConfig>,
+    pub description: Option<SubjectConfig>,
 }
 // コミットメッセージの主題テキストデータに課すデータ構造
 #[derive(Deserialize, Debug)]
