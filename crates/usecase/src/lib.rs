@@ -1,4 +1,4 @@
-use crate::entity::{CommitMessage, CzConfig, DEFAULT_PROMPT_OPTIONS};
+use entity::{CommitMessage, CzConfig, DEFAULT_PROMPT_OPTIONS};
 
 /// config の有無に応じてプロンプト用の選択肢一覧を返す
 pub fn resolve_prompt_options(config: &Option<CzConfig>) -> Vec<String> {

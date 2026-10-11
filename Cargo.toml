@@ -11,7 +11,14 @@ dirs = "5.0"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 indexmap = { version = "2.0", features = ["serde"] }
+entity = { path = "./crates/entity" }
+usecase = { path = "./crates/usecase" }
+driver = { path = "./crates/driver" }
+adapter = { path = "./crates/adapter" }
 
 [dev-dependencies]
 cargo-llvm-cov = "0.9.1"
 tempfile = "3"
+
+[workspace]
+members = ["crates/adapter", "crates/driver", "crates/entity", "crates/usecase"]

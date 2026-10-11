@@ -1,8 +1,3 @@
-mod adapter;
-mod driver;
-mod entity;
-mod usecase;
-
 use anyhow::Result;
 
 /// 各プログラムのオーケストレーションを行う

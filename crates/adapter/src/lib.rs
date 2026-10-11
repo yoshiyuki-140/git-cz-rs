@@ -2,8 +2,8 @@
 use anyhow::Result;
 use inquire::{Select, Text};
 
-use crate::entity::CzConfig;
-use crate::usecase::resolve_prompt_options;
+use entity::CzConfig;
+use usecase::resolve_prompt_options;
 
 /// コミット種別を選択する関数
 pub fn select_commit_type(config: &Option<CzConfig>) -> Result<String> {
