@@ -1,11 +1,10 @@
 use anyhow::{Context, Result};
 use dirs::home_dir;
+use entity::CzConfig;
 use std::env;
 use std::fs;
 use std::path::PathBuf;
 use std::process::Command;
-
-use crate::entity::CzConfig;
 
 /// 探索する設定ファイル名
 const CONFIG_FILENAME: &str = "cz.json";

@@ -1,2 +1,5 @@
+.PHONY: cover
+
+# テストカバレッジ
 cover:
-	cargo llvm-cov
+	cargo llvm-cov --workspace
