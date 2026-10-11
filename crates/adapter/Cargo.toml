@@ -5,6 +5,6 @@ edition = "2024"
 
 [dependencies]
 anyhow = "1.0.104"
-entity = { path = "../entity" }
 inquire = "0.9.4"
+entity = { path = "../entity" }
 usecase = { path = "../usecase" }
